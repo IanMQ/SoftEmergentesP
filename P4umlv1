@@ -1,0 +1,36 @@
+@startuml
+
+class ChangeEmailCommand {
+    - userId: String
+    - newEmail: String
+    --
+    + ChangeEmailCommand(userId: String, newEmail: String)
+    + getUserId(): String
+    + getNewEmail(): String
+}
+
+class ChangeEmailCommandHandler {
+    - repository: UserRepository
+    --
+    + ChangeEmailCommandHandler(repository: UserRepository)
+    + handle(command: ChangeEmailCommand): void
+}
+
+interface UserRepository {
+    + findById(userId: String): UserProfile
+    + save(profile: UserProfile): void
+}
+
+class UserProfile {
+    - userId: String
+    - email: String
+    - isActive: Boolean
+    --
+    + changeEmail(newEmail: String): void
+}
+
+ChangeEmailCommandHandler --> UserRepository : uses
+ChangeEmailCommandHandler --> ChangeEmailCommand : handles
+UserRepository --> UserProfile : manages
+
+@enduml
